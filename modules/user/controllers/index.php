@@ -185,7 +185,7 @@ class Index extends Controller_Module
 																->square(250)
 													)
 													->success(function($data){
-														$this->user->profile()->set('avatar', $data['avatar'])->update();
+														$this->user->profile()->set('avatar', $data['avatar'])->commit();
 														notify($this->lang('Avatar modifié'));
 														refresh();
 													})
@@ -198,7 +198,7 @@ class Index extends Controller_Module
 																->rectangle(1920, 400)
 													)
 													->success(function($data){
-														$this->user->profile()->set('cover', $data['cover'])->update();
+														$this->user->profile()->set('cover', $data['cover'])->commit();
 														notify($this->lang('Photo de couverture modifiée'));
 														refresh();
 													})
