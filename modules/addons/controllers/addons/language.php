@@ -42,38 +42,19 @@ class Language extends Controller
 		refresh();
 	}
 
-	public function order()
+	public function order($addon)
 	{
 		$langs = $this->array($this->config->langs);
-
-		if (($post = post_check('id', 'position')) && (list($addon_id, $position) = array_values($post)))
+		
+		if (($post = post_check('position')) && (list($position) = array_values($post)))
 		{
-			foreach ($langs as $id => $lang)
-			{
-				if ($lang->__addon->id == $addon_id)
-				{
-					break;
-				}
-			}
-
-			foreach ($langs->move($id, $position) as $order => $addon)
-			{
-				$addon->__addon	->set('data', $addon->__addon->data->set('order', $order))
-								->update();
-			}
-
+			
+			$addon->__addon->set('data', $addon->__addon->data->set('order', $position))->update();
+			
 			return $this->output->json(['success' => 'refresh']);
+			
 		}
-
 		return $this->modal('Préférence des langues', 'fa-flag-o')
-					->body($this->table2($langs)
-								->compact(function($a){
-									return $this->button_sort($a->__addon->id, 'admin/addons/order/'.$a->__addon->url());
-								})
-								->col(function($a){
-									return $this->label($a->info()->title, $a->info()->icon);
-								})
-					)
-					->close();
+					->body($this->view('language_order', ['langs' => $langs]));
 	}
 }
